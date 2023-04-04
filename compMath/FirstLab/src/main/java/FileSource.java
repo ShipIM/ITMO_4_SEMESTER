@@ -6,18 +6,18 @@ public class FileSource extends AbstractSource {
     }
 
     @Override
-    public float[][] data() {
+    public double[][] data() {
         try {
             int counter = Integer.parseInt(input.nextLine());
 
             String[] params;
-            float[][] result = new float[counter][counter + 1];
+            double[][] result = new double[counter][counter + 1];
 
             for (int i = 0; i < counter; i++) {
                 params = input.nextLine().split(" ");
 
                 for (int j = 0; j < counter + 1; j++)
-                    result[i][j] = Integer.parseInt(params[j]);
+                    result[i][j] = Double.parseDouble(params[j]);
             }
 
             return result;

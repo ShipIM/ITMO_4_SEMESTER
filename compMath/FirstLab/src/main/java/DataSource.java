@@ -1,4 +1,5 @@
 public interface DataSource {
-    float[][] data();
-    float precision();
+    double[][] data();
+
+    double precision();
 }

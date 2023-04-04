@@ -8,28 +8,33 @@ public class SimpleIteration {
         this.dataSource = dataSource;
     }
 
-    public float[] process() {
-        float[][] tmp = dataSource.data();
-        float precision = dataSource.precision();
+    public double[] process() {
+        double[][] tmp = dataSource.data();
+        double precision = dataSource.precision();
 
         tmp = diagonal(tmp);
 
+        for (int i = 0; i < tmp.length; i++) {
+            for (int j = 0; j < tmp[0].length; j++) {
+                System.out.print(tmp[i][j] + " ");
+            }
+            System.out.println("\n");
+        }
+
         tmp = transform(tmp);
 
-        if (condition(tmp))
-            System.out.println("Достаточное условие сходимости выполняется.");
-        else
-            System.out.println("Достаточное условие сходимости не выполняется.");
+        if (condition(tmp)) System.out.println("Достаточное условие сходимости выполняется.");
+        else System.out.println("Достаточное условие сходимости не выполняется.");
 
         return iterate(tmp, precision, 10000);
     }
 
-    private float[][] diagonal(float[][] array) {
-        HashMap<Integer, float[]> sorted = new HashMap<>();
-        float sum, max, previous;
+    private double[][] diagonal(double[][] array) {
+        HashMap<Integer, double[]> sorted = new HashMap<>();
+        double sum, max, previous;
         int column = 0;
 
-        for (float[] columns : array) {
+        for (double[] columns : array) {
             max = Float.MIN_VALUE;
             sum = 0;
 
@@ -43,18 +48,19 @@ public class SimpleIteration {
             }
 
             sum -= max;
-            if (max >= sum) if (!sorted.containsKey(column)) sorted.put(column, columns);
+            if (max >= sum)
+                if (!sorted.containsKey(column)) sorted.put(column, columns);
+                else {
+                    System.out.println("Приведение к диагональному преобладанию невозможно.");
+                    return array;
+                }
             else {
-                System.out.println("Приведение к диагональному представлению невозможно.");
-                return array;
-            }
-            else {
-                System.out.println("Приведение к диагональному представлению невозможно.");
+                System.out.println("Приведение к диагональному преобладанию невозможно.");
                 return array;
             }
         }
 
-        float[][] result = new float[array.length][array[0].length];
+        double[][] result = new double[array.length][array[0].length];
         for (int i = 0; i < array.length; i++) {
             if (sorted.containsKey(i)) result[i] = sorted.get(i);
             else {
@@ -66,9 +72,9 @@ public class SimpleIteration {
         return result;
     }
 
-    private float[][] transform(float[][] array) {
-        float[][] result = new float[array.length][array[0].length];
-        float parameter;
+    private double[][] transform(double[][] array) {
+        double[][] result = new double[array.length][array[0].length];
+        double parameter;
 
         for (int i = 0; i < array.length; i++) {
             parameter = array[i][i];
@@ -87,10 +93,10 @@ public class SimpleIteration {
         return result;
     }
 
-    private boolean condition(float[][] array) {
-        float max = Float.MIN_VALUE, sum;
+    private boolean condition(double[][] array) {
+        double max = Double.MIN_VALUE, sum;
 
-        for (float[] columns : array) {
+        for (double[] columns : array) {
             sum = 0;
 
             for (int i = 0; i < columns.length - 1; i++) {
@@ -100,15 +106,17 @@ public class SimpleIteration {
             max = Math.max(max, sum);
         }
 
+        System.out.println(max);
+
         return max < 1;
     }
 
-    private float[] iterate(float[][] array, float precision, int limit) {
-        float[] previous, current = new float[array.length];
+    private double[] iterate(double[][] array, double precision, int limit) {
+        double[] previous, current = new double[array.length];
         for (int i = 0; i < array.length; i++)
             current[i] = array[i][array[0].length - 1];
 
-        float criteria, max = Float.MIN_VALUE, tmp = 0;
+        double criteria, max = Double.MIN_VALUE, tmp = 0;
         int counter = 0;
 
         do {
@@ -120,6 +128,12 @@ public class SimpleIteration {
                 }
                 tmp += array[i][array[0].length - 1];
 
+                if (tmp == Double.NEGATIVE_INFINITY || tmp == Double.POSITIVE_INFINITY || Double.isNaN(tmp)) {
+                    System.out.println("Метод расходится за " + counter + " итераций.");
+
+                    return null;
+                }
+
                 current[i] = tmp;
                 max = Math.max(max, Math.abs(current[i] - previous[i]));
 
@@ -127,7 +141,7 @@ public class SimpleIteration {
             }
 
             criteria = max;
-            max = Float.MIN_VALUE;
+            max = Double.MIN_VALUE;
             counter++;
         } while (counter < limit && criteria > precision);
 

@@ -29,7 +29,7 @@ public class Main {
             }
 
             SimpleIteration task = new SimpleIteration(dataInput);
-            float[] result = task.process();
+            double[] result = task.process();
 
             System.out.println(result != null ? Arrays.toString(result) : "Определенного ответа нет");
         } catch (DataInputException exception) {

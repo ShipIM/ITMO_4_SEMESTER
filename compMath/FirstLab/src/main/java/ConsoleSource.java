@@ -6,13 +6,13 @@ public class ConsoleSource extends AbstractSource {
     }
 
     @Override
-    public float[][] data() {
+    public double[][] data() {
         try {
             System.out.println("Введите количество неизвестных уравнения:");
             int counter = Integer.parseInt(input.nextLine());
 
             String[] params;
-            float[][] result = new float[counter][counter + 1];
+            double[][] result = new double[counter][counter + 1];
 
             System.out.println("Введите коэффициенты уравнения (для каждого уравнения с новой строки через пробел):");
 
@@ -21,7 +21,7 @@ public class ConsoleSource extends AbstractSource {
                 params = input.nextLine().split(" ");
 
                 for (int j = 0; j < counter + 1; j++)
-                    result[i][j] = Integer.parseInt(params[j]);
+                    result[i][j] = Double.parseDouble(params[j]);
             }
 
             return result;
@@ -33,11 +33,11 @@ public class ConsoleSource extends AbstractSource {
     }
 
     @Override
-    public float precision() {
+    public double precision() {
         System.out.println("Укажите желаемую точность:");
 
         try {
-            return Float.parseFloat(input.nextLine());
+            return Double.parseDouble(input.nextLine());
         } catch (NumberFormatException exception) {
             throw new DataInputException("Точность должна быть числом.");
         }
