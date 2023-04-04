@@ -8,7 +8,11 @@ public interface Method {
 
     class Result {
         private double value;
-        private final long division;
+        private long division;
+
+        public Result() {
+
+        }
 
         public Result(double value, long division) {
             this.value = value;
