@@ -52,7 +52,7 @@ public class CustomMath {
                                              double accuracy, Approximation approximation, boolean type) {
         int k = 0;
         double previous, current = 0;
-        Method.Result result = new Method.Result(0, 0);
+        Method.Result result = new Method.Result();
 
         do {
             previous = current;
